@@ -3,9 +3,11 @@ const ctx = canvas.getContext('2d');
 
 const img = new Image();
 img.src = 'curry.png';
+// img.src = 'valorant.png';
 
 let brightnessArr = [];
 let particlesArr = [];
+let rgbArr = [];
 
 class Particle {
   constructor() {
@@ -27,7 +29,7 @@ class Particle {
 
   draw() {
     ctx.beginPath();
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = rgbArr[ Math.floor(this.y-1) * canvas.width + Math.floor(this.x) ];
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
     ctx.fill();
   }
@@ -39,6 +41,7 @@ img.onload = () => {
   canvas.height = img.height;
   ctx.drawImage(img, 0,0, canvas.width, canvas.height);
   const imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
+  // ctx.clearRect(0,0,canvas.width,canvas.height);
   console.log(imgData.data); //rgba 0-255
 
   for (let i = 0; i < imgData.data.length; i++) {
@@ -48,6 +51,7 @@ img.onload = () => {
     const brightness = (red + green + blue) / 3;
 
     brightnessArr.push(brightness);
+    rgbArr.push(`rgb(${red}, ${green}, ${blue})`);
   }
 
   // generate 10k particles
